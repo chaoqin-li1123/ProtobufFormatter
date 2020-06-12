@@ -7,6 +7,9 @@ using std::cout;
 using std::ostream;
 using std::streambuf;
 using std::endl;
+
+namespace mpcs {
+namespace v1 {
 class IndentStreambuf: public streambuf
 {
 public:
@@ -76,6 +79,11 @@ unindent(ostream &os)
     indent_os->unindent();
     return os;
 }
+} // v1
+
+using namespace v1;
+} // mpcs
+
 
 
 #endif

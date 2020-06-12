@@ -10,6 +10,9 @@ using std::vector;
 using std::string;
 using std::pair;
 using std::forward;
+
+namespace mpcs {
+namespace v1{
 enum class NodeType {
 	Message, Enum, Basic
 };
@@ -29,7 +32,7 @@ struct Node {
 		return move(name);
 	}
 	void set_type(string const& type_) {
-		type = type;
+		type = type_;
 	}
 	void set_type(string && type_) {
 		type = move(type_);
@@ -98,7 +101,7 @@ private:
 	vector<pair<string, int>> elements;
 };
 
-
+/* use constructor of the super class and customize init method for each sub-class*/
 void init(unique_ptr<MessageNode> & message_ptr) {}
 void init(unique_ptr<EnumNode> & enum_ptr, vector<pair<string, int>>&& enum_list) {
 	enum_ptr->set_enum_list(forward<vector<pair<string, int>>>(enum_list));
@@ -106,6 +109,10 @@ void init(unique_ptr<EnumNode> & enum_ptr, vector<pair<string, int>>&& enum_list
 void init(unique_ptr<BasicNode> & basic_ptr, int field) {
 	basic_ptr->set_field(field);
 }
+} // v1
+using namespace v1;
+} // mpcs
+
 
 #endif
 

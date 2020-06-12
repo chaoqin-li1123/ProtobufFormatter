@@ -2,12 +2,21 @@
 #define FORMAT_H
 #include "indent.h"
 #include "node.h"
-
+using mpcs::Node;
+using mpcs::EnumNode;
+using mpcs::BasicNode;
+using mpcs::MessageNode;
+using mpcs::indent;
+using mpcs::unindent;
+using mpcs::NodeType;
 using std::cerr;
+namespace mpcs {
+namespace v1 {
 struct NodeFormatter{
 	NodeFormatter(ostream& os_) : os(os_) {}
 	void format(unique_ptr<Node> const& node) {
 		format_head(node);
+		// use static function and reinterpret_cast for dynamic dispatch.
 		switch (node->get_node_type()) {
 			case NodeType::Enum: 
 				format_tail(reinterpret_cast<unique_ptr<EnumNode> const&>(node));
@@ -26,10 +35,11 @@ struct NodeFormatter{
 	void format_head(unique_ptr<Node> const& node) {
 		os << node->get_type() << " " << node->get_name();
 	}
-	void format_tail(unique_ptr<EnumNode> const& node) {
+	// function overload for specific type.
+	void format_tail(unique_ptr<EnumNode> const& enum_node) {
 		os << " {\n";
 		os << indent;
-		for (auto& element: node->get_elements()) {
+		for (auto& element: enum_node->get_elements()) {
 			os << element.first << " = " << element.second << ";\n";
 		}
 		os << unindent;
@@ -47,6 +57,10 @@ struct NodeFormatter{
 	}
 	ostream& os;
 };
+} // v1	
+using namespace v1;
+} // mpcs
+
 
 
 #endif
