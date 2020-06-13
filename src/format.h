@@ -2,13 +2,6 @@
 #define FORMAT_H
 #include "indent.h"
 #include "node.h"
-using mpcs::Node;
-using mpcs::EnumNode;
-using mpcs::BasicNode;
-using mpcs::MessageNode;
-using mpcs::indent;
-using mpcs::unindent;
-using mpcs::NodeType;
 using std::cerr;
 namespace mpcs {
 namespace v1 {
@@ -28,7 +21,7 @@ struct NodeFormatter{
 				format_tail(reinterpret_cast<unique_ptr<MessageNode> const&>(node));
 				break;
 			default:
-				cerr <<"Type mismatch.";
+				cerr << "Type mismatch.";
 		}
 		os << "\n";
 	}
@@ -55,6 +48,7 @@ struct NodeFormatter{
 		os << unindent;
 		os << "}";   
 	}
+private:
 	ostream& os;
 };
 } // v1	

@@ -1,3 +1,6 @@
+#ifndef BENCHMARK_H
+#define BENCHMARK_H
+
 #include <chrono>
 #include <ctime> 
 #include <iostream>
@@ -55,3 +58,5 @@ auto benchmark(int repeat, Callable func, Args... args) {
 }
 using namespace v1;
 } // mpcs
+
+#endif

@@ -1,0 +1,4 @@
+max_threads 4
+size_to_async 30
+indent_spaces 4
+enable_multi_thread false

@@ -6,41 +6,45 @@
 #include "build_tree.h"
 #include "benchmark.h"
 #include <functional>
+#include <iostream>
 using namespace std;
 using namespace mpcs;
 using std::function;
 
-void construct_nested_tree(int size_to_async) {
+void construct_nested_tree() {
 	vector<string> tokens = Tokenizer().tokenize("nested.proto").get_tokens();
 	// build the same tree for 10 times.
 	for (int i = 0; i < 10; i++)	{
 		vector<string> temp = tokens;
-		unique_ptr<Node> root = build_tree(temp, size_to_async);
+		unique_ptr<Node> root = build_tree(temp);
 	}
 }
 
-void construct_parallel_tree(int size_to_async) {
+void construct_parallel_tree() {
 	vector<string> tokens = Tokenizer().tokenize("parallel.proto").get_tokens();
 	// build the same tree for 10 times.
 	for (int i = 0; i < 10; i++)	{
 		vector<string> temp = tokens;
-		unique_ptr<Node> root = build_tree(temp, size_to_async);
+		unique_ptr<Node> root = build_tree(temp);
 	}
 }
 
 int main() {
-	benchmark(10, construct_nested_tree, 20); // muti-thread
-	// use binding
-	function<void()> construct_tree_single_thread = bind(construct_nested_tree, 100000000);
-	benchmark(10, construct_tree_single_thread); // disable multi-thread
+	config_init("config.txt");
+	// enable multi-thread
+	benchmark(10, construct_nested_tree); // muti-thread
+	benchmark(10, construct_parallel_tree);
 /* output in my computer is:
-Run the function for 10 times, total duration is 20419 ms.
-Run the function for 10 times, total duration is 109376 ms.
+Run the function for 10 times, total duration is 9844 ms.
+Run the function for 10 times, total duration is 622 ms.
 */	
-	benchmark(10, construct_parallel_tree, 20); // enable multi-thread
-	benchmark(10, construct_parallel_tree, 100000000); // disable multi-thread
+	// disable multi-thread
+	config_init("single_thread_config.txt");
+	benchmark(10, construct_nested_tree); 
+	benchmark(10, construct_parallel_tree); 
 /*
-Run the function for 10 times, total duration is 1813 ms.
-Run the function for 10 times, total duration is 5080 ms.
+Run the function for 10 times, total duration is 4406 ms.
+Run the function for 10 times, total duration is 500 ms.
 */
+// In both cases, single thread application has better performance.
 }

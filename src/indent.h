@@ -10,6 +10,7 @@ using std::endl;
 
 namespace mpcs {
 namespace v1 {
+int indent_spaces{4};
 class IndentStreambuf: public streambuf
 {
 public:
@@ -30,16 +31,15 @@ public:
         return buffer->sputc(value);
     };
     virtual void indent() {
-        total_indent += aindent;
+        total_indent += indent_spaces;
     }
     virtual void unindent() {
-        if (total_indent > 0) total_indent -= aindent;
+        if (total_indent > 0) total_indent -= indent_spaces;
     }
 private:
     streambuf *buffer;
     int total_indent;
-    bool begin_line;
-    const static int aindent = 4; 
+    bool begin_line; 
 };
 
 
